@@ -1,0 +1,40 @@
+diff -urN webkitgtk-2.4.11.origin/Source/JavaScriptCore/API/JSStringRef.h webkitgtk-2.4.11/Source/JavaScriptCore/API/JSStringRef.h
+--- webkitgtk-2.4.11.origin/Source/JavaScriptCore/API/JSStringRef.h	2016-04-10 09:48:36.000000001 +0300
++++ webkitgtk-2.4.11/Source/JavaScriptCore/API/JSStringRef.h	2018-03-15 11:50:40.324529036 +0200
+@@ -32,6 +32,7 @@
+ #include <stdbool.h>
+ #endif
+ #include <stddef.h> /* for size_t */
++#include <uchar.h>
+ 
+ #ifdef __cplusplus
+ extern "C" {
+@@ -43,7 +44,7 @@
+ @typedef JSChar
+ @abstract A Unicode character.
+ */
+-    typedef unsigned short JSChar;
++    typedef char16_t JSChar;;
+ #else
+     typedef wchar_t JSChar;
+ #endif
+diff -urN webkitgtk-2.4.11.origin/Source/WebKit2/Shared/API/c/WKString.h webkitgtk-2.4.11/Source/WebKit2/Shared/API/c/WKString.h
+--- webkitgtk-2.4.11.origin/Source/WebKit2/Shared/API/c/WKString.h	2016-04-10 09:48:37.000000001 +0300
++++ webkitgtk-2.4.11/Source/WebKit2/Shared/API/c/WKString.h	2018-03-15 11:51:58.946322465 +0200
+@@ -28,6 +28,7 @@
+ 
+ #include <WebKit2/WKBase.h>
+ #include <stddef.h>
++#include <uchar.h>
+ 
+ #ifndef __cplusplus
+ #include <stdbool.h>
+@@ -39,7 +40,7 @@
+ 
+ #if !defined(WIN32) && !defined(_WIN32) \
+     && !((defined(__CC_ARM) || defined(__ARMCC__)) && !defined(__linux__)) /* RVCT */
+-    typedef unsigned short WKChar;
++    typedef char16_t WKChar;
+ #else
+     typedef wchar_t WKChar;
+ #endif
