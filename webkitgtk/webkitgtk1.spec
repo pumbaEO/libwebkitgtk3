@@ -8,7 +8,7 @@
         mkdir -p %{buildroot}%{_pkgdocdir} ||: ; \
         cp -p %1  %{buildroot}%{_pkgdocdir}/$(echo '%1' | sed -e 's!/!.!g')
 
-Name:           webkitgtk3
+Name:           webkitgtk1
 Version:        2.4.11
 Release:        6%{?dist}
 Summary:        GTK+ Web content engine library
@@ -22,7 +22,7 @@ Source0:        http://webkitgtk.org/releases/webkitgtk-%{version}.tar.xz
 # https://bugs.webkit.org/show_bug.cgi?id=142074
 Patch0:         webkitgtk-2.4.8-user-agent.patch
 Patch1:         webkitgtk-2.4.9-abs.patch
-Patch2:	        webkitgtk-icu59.patch
+Patch2:         webkitgtk-icu59.patch
 
 
 BuildRequires:  at-spi2-core-devel
@@ -39,7 +39,8 @@ BuildRequires:  gperf
 BuildRequires:  gstreamer1-devel
 BuildRequires:  gstreamer1-plugins-base-devel
 BuildRequires:  gtk2-devel
-BuildRequires:  gtk3-devel >= 3.6
+BuildRequires:  gtk2-devel >= 2.24.10
+#BuildRequires:  gtk3-devel >= 3.6
 BuildRequires:  gtk-doc
 BuildRequires:  glib2-devel >= 2.36.0
 BuildRequires:  harfbuzz-devel
@@ -57,6 +58,10 @@ BuildRequires:  gobject-introspection-devel >= 1.32.0
 BuildRequires:  perl-Switch
 BuildRequires:  ruby rubypick rubygems
 BuildRequires:  mesa-libGL-devel
+BuildRequires:  cairo-devel
+BuildRequires:  cairo-gobject-devel
+BuildRequires:  fontconfig-devel >= 2.5
+BuildRequires:  freetype-devel
 %ifarch ppc
 BuildRequires:  libatomic
 %endif
@@ -118,7 +123,7 @@ This package contains developer documentation for %{name}.
 %endif
 
 %configure                                                      \
-                        --with-gtk=3.0                          \
+                        --with-gtk=2.0                          \
                         --disable-webkit2                       \
 %ifarch s390 s390x ppc %{power64} aarch64 %{mips}
                         --disable-jit                           \
@@ -147,14 +152,14 @@ install -d -m 755 %{buildroot}%{_libexecdir}/%{name}
 install -m 755 Programs/GtkLauncher %{buildroot}%{_libexecdir}/%{name}
 
 # Remove lib64 rpaths
-chrpath --delete %{buildroot}%{_bindir}/jsc-3
-chrpath --delete %{buildroot}%{_libdir}/libwebkitgtk-3.0.so
+chrpath --delete %{buildroot}%{_bindir}/jsc-1
+chrpath --delete %{buildroot}%{_libdir}/libwebkitgtk-1.0.so
 chrpath --delete %{buildroot}%{_libexecdir}/%{name}/GtkLauncher
 
 # Remove .la files
 find $RPM_BUILD_ROOT%{_libdir} -name "*.la" -delete
 
-%find_lang WebKitGTK-3.0
+%find_lang WebKitGTK-2.0
 
 ## Finally, copy over and rename the various files for %%doc inclusion.
 %add_to_doc_files Source/WebKit/LICENSE
@@ -174,25 +179,25 @@ find $RPM_BUILD_ROOT%{_libdir} -name "*.la" -delete
 %postun -p /sbin/ldconfig
 
 
-%files -f WebKitGTK-3.0.lang
+%files -f WebKitGTK-2.0.lang
 %doc %{_pkgdocdir}/
-%{_libdir}/libwebkitgtk-3.0.so.*
-%{_libdir}/libjavascriptcoregtk-3.0.so.*
-%{_libdir}/girepository-1.0/WebKit-3.0.typelib
-%{_libdir}/girepository-1.0/JavaScriptCore-3.0.typelib
+%{_libdir}/libwebkitgtk-1.0.so.*
+%{_libdir}/libjavascriptcoregtk-1.0.so.*
+%{_libdir}/girepository-1.0/WebKit-1.0.typelib
+%{_libdir}/girepository-1.0/JavaScriptCore-1.0.typelib
 %dir %{_libexecdir}/%{name}
-%{_libexecdir}/%{name}/GtkLauncher
-%{_datadir}/webkitgtk-3.0
+%{_datadir}/webkitgtk-1.0
 
 %files  devel
-%{_bindir}/jsc-3
-%{_includedir}/webkitgtk-3.0
-%{_libdir}/libwebkitgtk-3.0.so
-%{_libdir}/libjavascriptcoregtk-3.0.so
-%{_libdir}/pkgconfig/webkitgtk-3.0.pc
-%{_libdir}/pkgconfig/javascriptcoregtk-3.0.pc
-%{_datadir}/gir-1.0/WebKit-3.0.gir
-%{_datadir}/gir-1.0/JavaScriptCore-3.0.gir
+%{_bindir}/jsc-1
+%{_includedir}/webkitgtk-1.0
+%{_libdir}/libwebkitgtk-1.0.so
+%{_libdir}/libjavascriptcoregtk-1.0.so
+%{_libdir}/pkgconfig/webkit-1.0.pc
+%{_libdir}/pkgconfig/javascriptcoregtk-1.0.pc
+%{_datadir}/gir-1.0/WebKit-1.0.gir
+%{_datadir}/gir-1.0/JavaScriptCore-1.0.gir
+%{_libexecdir}/%{name}/GtkLauncher
 
 %files doc
 %dir %{_datadir}/gtk-doc
